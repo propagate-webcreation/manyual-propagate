@@ -27,7 +27,7 @@ curl -s -H "Authorization: Bearer $TOKEN" \
 
 | パラメータ | 説明 | 例 |
 |-----------|------|---|
-| `{シートID}` | スプレッドシートのURLに含まれる44文字のID | `{PRODUCTION_SHEET_ID}` |
+| `{シートID}` | スプレッドシートのURLに含まれる44文字のID | `1OfNcHbWvRIYyMEy9bSU4-aCduL0rmdw_fVQla9Fa8Dc` |
 | `{範囲}` | 「タブ名!セル範囲」の形式 | `メイン!B3:C` |
 | `valueRenderOption` | 値の返し方 | 下記参照 |
 
@@ -44,7 +44,7 @@ curl -s -H "Authorization: Bearer $TOKEN" \
 **メインタブのB列（record_id）を全行取得:**
 ```bash
 curl -s -H "Authorization: Bearer $TOKEN" \
-  "https://sheets.googleapis.com/v4/spreadsheets/{PRODUCTION_SHEET_ID}/values/%E3%83%A1%E3%82%A4%E3%83%B3!B3:B"
+  "https://sheets.googleapis.com/v4/spreadsheets/1OfNcHbWvRIYyMEy9bSU4-aCduL0rmdw_fVQla9Fa8Dc/values/%E3%83%A1%E3%82%A4%E3%83%B3!B3:B"
 ```
 
 > ⚠️ **日本語タブ名はURLエンコードが必要。** 「メイン」→ `%E3%83%A1%E3%82%A4%E3%83%B3`
@@ -103,7 +103,7 @@ curl -s -X PUT -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/j
 import json, urllib.request, urllib.parse, os
 
 TOKEN = os.popen('gcloud auth print-access-token').read().strip()
-SHEET_ID = '{PRODUCTION_SHEET_ID}'
+SHEET_ID = '1OfNcHbWvRIYyMEy9bSU4-aCduL0rmdw_fVQla9Fa8Dc'
 
 def fetch(range_str, render='FORMATTED_VALUE'):
     """スプレッドシートからデータを読み取る"""
@@ -300,7 +300,7 @@ AA列（client_email）、AB列（line_display_name）、Q/U/V/W列はARRAYFORMU
 
 | 用途 | ID |
 |------|-----|
-| 本番シート | `{PRODUCTION_SHEET_ID}` |
+| 本番シート | `1OfNcHbWvRIYyMEy9bSU4-aCduL0rmdw_fVQla9Fa8Dc` |
 | 旧原本（参照のみ） | `{OLD_SHEET_ID}` |
 | 出勤カレンダー | `{ATTENDANCE_SHEET_ID}` |
 | 既存サイト修正依頼 | `{EXISTING_FIX_SHEET_ID}` |
