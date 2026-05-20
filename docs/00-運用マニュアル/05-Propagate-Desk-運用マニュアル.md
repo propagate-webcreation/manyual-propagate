@@ -1,5 +1,14 @@
 # 5. Propagate Desk 運用マニュアル
 
+> 📖 **このマニュアルの原本は Notion で管理しています**
+>
+> 最新版・コメント・編集依頼は Notion 側でお願いします。Git（このファイル）は Notion からの同期コピーです。
+>
+> - 当マニュアル Notion 原本: [05-Propagate-Desk-運用マニュアル](https://www.notion.so/05-Propagate-Desk-{NOTION_PAGE_ID})
+> - Desk ツール公式マニュアル（Desk チーム管理）: [Propagate Desk 公式](https://www.notion.so/Propagate-Desk-{NOTION_PAGE_ID})
+
+---
+
 > 📋 **目次（アジェンダ）**
 >
 
