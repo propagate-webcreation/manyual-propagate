@@ -1,6 +1,6 @@
 # 制作進行 運用マニュアル（公開版）
 
-> このリポジトリは [`propagate-webcreation/seisakushinko`](https://github.com/propagate-webcreation/seisakushinko)（Private）から自動同期されています。
+> このリポジトリは [`propagate-infra/seisakushinko`](https://github.com/propagate-infra/seisakushinko)（Private）から自動同期されています。
 > **編集はPrivateリポジトリ側で行ってください。** Publicへの直接編集は自動同期時に上書きされます。
 >
 > シートID等の機密情報はプレースホルダ（例: `{PRODUCTION_SHEET_ID}`）に置換されています。実際の値が必要な場合はPrivateリポジトリを参照してください。
@@ -30,8 +30,3 @@
 
 - [制作品質標準化プログラム](docs/04-その他/01-制作品質標準化プログラム.md)
 - [Slackチャンネル運用ガイド](docs/04-その他/02-Slackチャンネル運用ガイド.md)
-
----
-
-*このリポジトリは [`propagate-webcreation/seisakushinko`](https://github.com/propagate-webcreation/seisakushinko)（Private）から自動同期されています。*
-*編集・追記の依頼は Slack で鈴木までご連絡ください。*
