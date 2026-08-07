@@ -179,7 +179,7 @@ GASプロジェクトは複数の `.js`（または `.gs`）ファイルで構�
 | 種類 | 説明 | 例 |
 |------|------|---|
 | onEdit | スプレッドシートのセルが手動編集された時 | `onEditAll(e)` |
-| 時間ベース | 定期実行（毎分、毎時、毎日等） | `fillMissingPolishTimestamps()` 毎1分 |
+| 時間ベース | 定期実行（毎分、毎時、毎日等） | `fixIncompleteRows()` 毎5分 |
 | 手動実行 | GASエディタから手動で実行 | `setupDailyAutoMoveTrigger()` |
 
 ### onEditイベントオブジェクト（e）
