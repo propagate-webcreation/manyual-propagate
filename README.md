@@ -29,6 +29,8 @@
 - [ディレクター運用マニュアル](docs/00-運用マニュアル/03-ディレクター運用マニュアル.md)
 - [営業運用マニュアル](docs/00-運用マニュアル/04-営業運用マニュアル.md)
 - [Propagate-Desk-運用マニュアル](docs/00-運用マニュアル/05-Propagate-Desk-運用マニュアル.md)
+- [propagate-meet-操作マニュアル](docs/00-運用マニュアル/06-propagate-meet-操作マニュアル.md)
+- [ドメイン-GSC-GA-Workspace設定依頼管理-運用マニュアル](docs/00-運用マニュアル/06-ドメイン-GSC-GA-Workspace設定依頼管理-運用マニュアル.md)
 
 ### 01-技術仕様
 
