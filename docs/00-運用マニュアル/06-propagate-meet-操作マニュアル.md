@@ -583,3 +583,202 @@ propagate-meet から kintone へ**自動で書かれる**のは次のものだ�
 | 商談品質の点数 | 採点・再採点のとき |
 
 ⚠️ **管理画面から手入力した予約は書き戻されません。**手入力したら kintone 側も手で入れてください。
+
+<!-- AUTOGEN:START propagate-meet-reference -->
+
+> ここから下は **propagate-meet のコードから自動生成** しています。
+> 手で直しても次の生成で上書きされます。中身を変えたいときはコードを直してください。
+> 生成元: propagate-infra/appo-followup `scripts/gen-meet-manual-reference.mts`
+
+## kintone フィールド対応表
+
+「kintone の◯◯はどこに入れますか」に答えるための表です。
+
+| kintone フィールド | 意味 | コード上の名前 | 定義場所 |
+|---|---|---|---|
+| `チェックボックス` | 電話アポ有無 (チェックボックス) / 電話アポ有無 (チェックボックス)。ビューの絞り込み条件③。 | phoneAppt, KINTONE_PHONE_APPT_FIELD, PHONE_APPOINTMENT_FIELD | src/core/appo-feedback/target.ts, src/core/appointment-ops.ts |
+| `ドロップダウン_0` | リード経路 (kintone フィールドコード)。 / リード経路のフィールドコード (必須・DROP_DOWN) | LEAD_ROUTE_FIELD, KINTONE_LEAD_ROUTE_FIELD | src/core/seo-funnel.ts, src/infrastructure/kintone/booking-record-mapper.ts |
+| `ドロップダウン_3` | 検討理由 (ドロップダウン)。営業が商談後に手で選んだ一次情報 | considerReason | src/core/appo-feedback/target.ts |
+| `ラジオボタン` | 契約プラン (BASIC(9,800円) 等) | plan, swPlan | src/core/hearing-issue.ts, src/core/sales-payroll/extract.ts |
+| `ラジオボタン_12` | サイト制作形式 (LP / 採用LP / basic CP / standard CP / advance CP / その他) / 発行パイプラインはこの 2 つが埋まっていないと発行せず打ち切るため、画面でも読む。 | siteFormat | src/core/hearing-issue.ts, src/infrastructure/kintone/hearing-sheet-reader.ts |
+| `ラジオボタン_9` | kintone「後追い (初回アポ欠席)」ラジオのフィールドコード。read (parse) と write (NG転記) 共通。 | KINTONE_FOLLOWUP_FIELD | src/core/kintone.ts |
+| `開始月_1` | — | contractMonthField, swMonth, contractMonth, month | src/app/admin/sales-dashboard/_legacy/services.ts, src/core/sales-dashboard/services.ts |
+| `開始月_10` | — | contractMonth | src/infrastructure/kintone/booking-record-mapper.ts |
+| `開始月_2` | — | billingStart | src/infrastructure/kintone/contract-reader.ts |
+| `開始月_3` | — | contractMonth | src/infrastructure/kintone/booking-record-mapper.ts |
+| `開始月_6` | — | contractMonthField, adMonth, contractMonth, month | src/app/admin/sales-dashboard/_legacy/services.ts, src/core/sales-dashboard/services.ts |
+| `開始月_8` | — | contractMonthField, ssMonth, contractMonth, month | src/app/admin/sales-dashboard/_legacy/services.ts, src/core/sales-dashboard/services.ts |
+| `日付_0` | 日付_0 初回アポイント日 / 初回アポイント日。日時変更/再アポで上書きされる「現在のアポ日」(初回限定ではない) / 初回アポイント日 (日付_0) のフィールドコード (env `KINTONE_FIRST_APPT_DATE_FIELD` で差替可)。 / kintone `日付_0` 初回アポ日。成約率の分母と推移グラフのアポ面に使う。 | firstApptDate, KINTONE_FIRST_APPT_DATE_FIELD, KINTONE_APPOINTMENT_DATE_FIELD, FIRST_APPOINTMENT_DATE_FIELD, FIRST_APPO_FIELD, APPOINTMENT_FIELD, FIRST_APPOINTMENT_FIELD | src/core/appo-feedback/target.ts, src/core/appointment-ops.ts |
+| `日付_2` | — | jConfirmedOn, J_CONFIRMED_FIELD | src/core/sales-payroll/extract.ts, src/infrastructure/kintone/seo-funnel-reader.ts |
+| `日付_5` | 結論確認予定日 (日付)。追客メールの送付タイミングの起点でもある | conclusionCheckDate | src/core/appo-feedback/target.ts |
+| `複数選択_4` | kintone `複数選択_4` サブスクAd の契約プラン (MULTI_SELECT)。金額はこのラベルから引く。 | AD_PLAN_FIELD | src/lib/sales-payroll/build.ts |
+| `文字列__1行_` | 企業名。ラベルは「パートナー名（サイト名）」だが値は顧客企業名 (株式会社… 等) | companyName, COMPANY_FIELD | src/core/appo-feedback/target.ts, src/core/hearing-issue.ts |
+| `文字列__1行__1` | 先方氏名 (文字列1行) / 先方氏名。宛名に使う (空なら「ご担当者様」) | customerName, contactName | src/core/appo-feedback/target.ts, src/core/hearing-issue.ts |
+| `文字列__1行__23` | 連絡用アドレス。記入があれば送信先として登録メールより優先する | contactEmail | src/core/hearing-issue.ts, src/infrastructure/kintone/hearing-sheet-reader.ts |
+| `文字列__1行__3` | — | email, emailField | src/core/hearing-issue.ts, src/infrastructure/kintone/hearing-sheet-reader.ts |
+| `文字列__1行__8` | 検討理由 (詳細・自由入力)。ドロップダウンでは分からない事情が書かれている | considerReasonDetail | src/core/appo-feedback/target.ts |
+| `文字列__1行__9` | 電話番号 (再アポ架電用) | phone | src/core/appo-feedback/target.ts |
+
+## 管理画面の一覧
+
+追客台帳 (propagate-meet) の画面です。全 55 画面。
+
+| 画面 | URL |
+|---|---|
+| ダッシュボード | `/admin` |
+| — | `/admin/alerts` |
+| — | `/admin/appo-feedback` |
+| アポ予約率 | `/admin/appo-rate` |
+| ナレッジの穴 | `/admin/ask/gaps` |
+| アポ予約 | `/admin/booking` |
+| — | `/admin/booking/demo-proposals` |
+| — | `/admin/booking/hearing-sheet` |
+| — | `/admin/booking/links` |
+| — | `/admin/booking/links/subweb-reappo` |
+| — | `/admin/booking/reservations` |
+| — | `/admin/booking/services` |
+| — | `/admin/booking/shifts` |
+| — | `/admin/booking/week` |
+| 配信の中身 | `/admin/cadence` |
+| 架電報告の照合 | `/admin/call-report` |
+| 対応状況 | `/admin/call-results` |
+| 送信ログ | `/admin/campaigns` |
+| — | `/admin/click-tracking` |
+| — | `/admin/conflicts` |
+| 問い合わせ・CVR | `/admin/cvr` |
+| — | `/admin/demo-followups` |
+| 無料デモサイト | `/admin/demo-jobs` |
+| 除外リスト | `/admin/exclusions` |
+| 手動発行 | `/admin/hearing/issue` |
+| 管理 | `/admin/hearing/manage` |
+| — | `/admin/inquiries` |
+| — | `/admin/kpi` |
+| 台帳 | `/admin/leads` |
+| — | `/admin/lists` |
+| システムログ | `/admin/logs` |
+| — | `/admin/mail-copy` |
+| — | `/admin/mail-lane` |
+| — | `/admin/mail-queue` |
+| 成果 | `/admin/mail-results` |
+| 一斉送信 | `/admin/mailout` |
+| — | `/admin/mailout/confirm` |
+| 商談FB | `/admin/meeting-fb` |
+| — | `/admin/meeting-fb/amendments` |
+| 再生成 | `/admin/meeting-quality` |
+| 自分のスコア | `/admin/my-score` |
+| — | `/admin/notifications` |
+| — | `/admin/page-usage` |
+| 商談前の準備 | `/admin/prep` |
+| サイアポ | `/admin/reappo` |
+| 評価のものさし | `/admin/rubric` |
+| 成約ダッシュボード | `/admin/sales-dashboard` |
+| 営業成績・報酬 | `/admin/sales-payroll` |
+| セミナー | `/admin/seminars` |
+| SEO経路別ファネル | `/admin/seo-funnel` |
+| 商談スキル | `/admin/skill` |
+| — | `/admin/skill/b-stock` |
+| スタッフ | `/admin/staff` |
+| 文面 | `/admin/templates` |
+| お礼コール | `/admin/thank-you` |
+
+## 対応が必要な通知
+
+Slack に流れる通知のうち、**誰かが期限内に動く必要があるもの**です。
+
+| 通知 | どこに出るか | 誰が・いつまでに・何をするか |
+|---|---|---|
+| 同一顧客の重複予約 | SLACK_CHANNEL_SALES 既定 | 担当営業が当日中にどちらを残すか決める |
+| 予約の書き込み失敗アラート | SLACK_CHANNEL_SALES 既定 | 担当営業が当日中に管理画面で予約を作り直す |
+| 予約お礼コール | #sales-お礼電話用 | 担当営業が当日中にお礼コールを入れて記録する |
+| 架電ペース低下 | #sales-callstaff勤怠 (SLACK_CHANNEL_CALLSTAFF 既定) | コールスタッフがその場で架電を再開する |
+| 予約の棄却 | #sales-アポ通知アポ設定 (SLACK_CHANNEL_SALES 既定) | 担当営業が当日中に管理画面で予約を作り直す |
+| 新しいお問い合わせ | #sales-アポ通知アポ設定 (SLACK_CHANNEL_SALES 既定) | 架電担当が即架電する (マニュアル『即架電徹底＆直近CVがついた順番から架電』) |
+| デモアポ日が未設定 | DEMO_APO_ALERT_SLACK_CHANNEL 既定 #sales-デモアポ日設定 | 担当営業が当日中にデモ提案の日程を出す |
+| デモ提案リンクの空き枠が 0 | DEMO_INVITE_ALERT_SLACK_CHANNEL → SLACK_CHANNEL_SALES | 担当営業が当日中に 14 日以内のシフトを入れる |
+| デモ商談の日程が kintone と食い違う / デモ動線の取り違え | #sales-アポ通知アポ設定 (SLACK_CHANNEL_SALES 既定) | 担当営業が当日中にデモ動線へ乗せ直す (当日リスケの予防) |
+| 🚨 未処理エラー検知 (システム全般) | SLACK_ERROR_CHANNEL 既定 #automation-アポ日程設定 | エンジニアが当日中に原因を特定する |
+| 【要確認】(回答後の下流処理の不整合) | #新ヒアリングフォーム回答確認ch (固定) | 運用担当が当日中に制作進行シートを直す |
+| 🚨 未処理エラー検知 (ヒアリングシート発行) | #ヒアリングフォーム送信 (HEARING_NOTIFY_CHANNEL 既定) | 担当営業が当日中に管理画面から該当行の「メールを送る」を押す (営業に手が無い原因は engineer 側へ回す) |
+| ⚠️ 要確認 (発行済み・重複検出など) | #ヒアリングフォーム送信 (HEARING_NOTIFY_CHANNEL 既定) | 担当営業が当日中に既存URLを顧客へ渡す (既に送信済みのケースは 2026-08-26 から呼ばない) |
+| 以下漏れ案件 | #新ヒアリングフォーム回答確認ch (固定) | 運用担当が当日中に該当案件を片付ける |
+| 制作進行に転記されていない案件です | #新ヒアリングフォーム回答確認ch (固定) | 運用担当が当日中に制作進行へ行を作る |
+| ヒアリング状況通知 (送付済み・未回答が7日以上 など) | HEARING_STATUS_ALERT_SLACK_CHANNEL 既定 #ヒアリングフォーム送信 | 担当営業が当日中に顧客へ催促する |
+| 重複送信の検知 | ALERT_SLACK_CHANNEL (未設定) → 従来チャンネル | エンジニアが当日中に送信を止めて原因を特定する |
+| 事前動画のクリックが 0 のまま | ALERT_SLACK_CHANNEL (未設定) → SLACK_ERROR_CHANNEL | エンジニアが当日中に計測経路を確認する |
+| 採点基準の追補の承認依頼 (日次) | #sales-商談品質 (MEETING_QUALITY_SLACK_CHANNEL) | 営業リーダーが翌営業日までに承認 / 却下する |
+| 初回アポ欠席カード | NO_SHOW_REPORT_SLACK_CHANNEL 既定 #sales-アポ結果報告 | 担当営業が当日中にスレッドへ当日対応を記録する |
+| 既に商談化(bcd)している先方に別の予約が入った | #sales-アポ通知アポ設定 (SLACK_CHANNEL_SALES 既定) | 担当営業が当日中にどちらの商談として扱うか決める |
+| 初回アポ欠席なのに今後アポが入っている顧客 | #sales-アポ通知アポ設定 (SLACK_CHANNEL_SALES 既定) | 担当営業が当日中にリストから外す (掘り起こしメールが飛ぶのを止める) |
+| 👤 初めてログインした人を台帳に追加しました | SLACK_ERROR_CHANNEL 既定 #automation-アポ日程設定 | /admin/staff で権限 (営業/管理者) と姓 (kintone 受注担当と同表記) を当日中に確認する。営業でなければ削除する |
+| 担当メンションが飛ばないスタッフが居ます | SLACK_ERROR_CHANNEL 既定 #automation-アポ日程設定 | /admin/staff で Slack ユーザー ID を入れる (入れるまでその人は担当メンションから外れ続ける) |
+| カレンダー同期の失敗 | ALERT_SLACK_CHANNEL (未設定) → 従来チャンネル | エンジニアが当日中に同期を復旧する |
+| 二重予約の事後検知 | SLACK_CHANNEL_SALES 既定 | 担当営業が当日中にどちらかを別枠へ移す |
+
+## 自動で動いている処理
+
+| 自動処理 | いつ動くか | cron 式 |
+|---|---|---|
+| `/api/cron/appo-feedback-judge` | 5 分おき | `*/5 * * * *` |
+| `/api/cron/appointment-count-summary` | 毎日 08:00 (JST) | `0 23 * * *` |
+| `/api/cron/booking-reminders?kind=after_appointment` | 1 時間おき | `5 * * * *` |
+| `/api/cron/booking-reminders?kind=day_before` | 毎日 16:00 (JST) | `0 7 * * *` |
+| `/api/cron/booking-reminders?kind=one_hour_before` | 10 分おき | `*/10 * * * *` |
+| `/api/cron/booking-reminders?kind=two_hours_before` | 10 分おき | `*/10 * * * *` |
+| `/api/cron/call-count-sheet` | 5 0-12 * * * | `5 0-12 * * *` |
+| `/api/cron/call-count-summary` | */30 0-12 * * * | `*/30 0-12 * * *` |
+| `/api/cron/call-rate-alert` | 0 1-10 * * * | `0 1-10 * * *` |
+| `/api/cron/call-result-summary` | 毎日 08:10 (JST) | `10 23 * * *` |
+| `/api/cron/call-staff-offday` | 毎日 09:00 (JST) | `0 0 * * *` |
+| `/api/cron/daily-summary` | 毎日 08:30 (JST) | `30 23 * * *` |
+| `/api/cron/demo-apo-alert` | 45 0 * * 1-5 | `45 0 * * 1-5` |
+| `/api/cron/demo-followup` | 10 分おき | `*/10 * * * *` |
+| `/api/cron/demo-invite-retry` | 毎日 09:30 (JST) | `30 0 * * *` |
+| `/api/cron/demo-proposal-reminders` | 毎日 09:00 (JST) | `0 0 * * *` |
+| `/api/cron/detect-duplicate-sends` | 1 時間おき | `25 * * * *` |
+| `/api/cron/enqueue-cadence` | 毎日 07:30 (JST) | `30 22 * * *` |
+| `/api/cron/event-sends` | 0 0-10 * * * | `0 0-10 * * *` |
+| `/api/cron/generate-lists` | 毎日 07:00 (JST) | `0 22 * * *` |
+| `/api/cron/hearing-dossier` | 1 時間おき | `20 * * * *` |
+| `/api/cron/hearing-drive-mirror` | 1 時間おき | `0 * * * *` |
+| `/api/cron/hearing-issue` | */15 0-13,22,23 * * * | `*/15 0-13,22,23 * * *` |
+| `/api/cron/hearing-leak-check` | 毎日 08:00 (JST) | `0 23 * * *` |
+| `/api/cron/hearing-mail-retry` | 15 分おき | `*/15 * * * *` |
+| `/api/cron/hearing-pa-delivery` | 5 分おき | `*/5 * * * *` |
+| `/api/cron/hearing-sheet-queued` | 10 分おき | `*/10 * * * *` |
+| `/api/cron/hearing-status-alert` | 50 0 * * 1-5 | `50 0 * * 1-5` |
+| `/api/cron/meeting-quality-digest` | 毎日 19:00 (JST) | `0 10 * * *` |
+| `/api/cron/meeting-quality-fb-harvest` | 1 時間おき | `50 * * * *` |
+| `/api/cron/meeting-quality-fb-triage` | 5,35 * * * * | `5,35 * * * *` |
+| `/api/cron/meeting-quality-knowledge` | 毎日 07:20 (JST) | `20 22 * * *` |
+| `/api/cron/meeting-quality-rescore` | 5 分おき | `*/5 * * * *` |
+| `/api/cron/meeting-quality-score` | 5 分おき | `*/5 * * * *` |
+| `/api/cron/monitor-video-clicks` | 毎日 17:00 (JST) | `0 8 * * *` |
+| `/api/cron/monthly-reappo-blast` | 0 1 20 * * | `0 1 20 * *` |
+| `/api/cron/no-show-report` | 毎日 07:10 (JST) | `10 22 * * *` |
+| `/api/cron/normalize-transcript-names` | 毎日 21:30 (JST) | `30 12 * * *` |
+| `/api/cron/payroll-reconcile` | 毎日 08:00 (JST) | `0 23 * * *` |
+| `/api/cron/poll-mailbox` | 1 時間おき | `0 * * * *` |
+| `/api/cron/process-ai-call-queue` | 15 0-8 * * * | `15 0-8 * * *` |
+| `/api/cron/process-bulk-queue` | 3 分おき | `*/3 * * * *` |
+| `/api/cron/process-mail-queue` | 0 0-9 * * * | `0 0-9 * * *` |
+| `/api/cron/purge-app-logs` | 毎日 04:30 (JST) | `30 19 * * *` |
+| `/api/cron/reconcile-bcd-reengaged` | 毎日 07:50 (JST) | `50 22 * * *` |
+| `/api/cron/reconcile-call-report` | */30 0-11 * * * | `*/30 0-11 * * *` |
+| `/api/cron/reconcile-demo-booking-mismatch` | */15 0-11 * * * | `*/15 0-11 * * *` |
+| `/api/cron/reconcile-demo-proposal-date` | 毎日 08:20 (JST) | `20 23 * * *` |
+| `/api/cron/reconcile-no-show-reengaged` | 毎日 07:45 (JST) | `45 22 * * *` |
+| `/api/cron/record-appo-done` | 毎日 07:55 (JST) | `55 22 * * *` |
+| `/api/cron/reset-stale-demo-jobs` | 30 分おき | `*/30 * * * *` |
+| `/api/cron/sales-qa-gap-digest` | 0 1 * * 1 | `0 1 * * 1` |
+| `/api/cron/seminar-reminders` | 10 分おき | `*/10 * * * *` |
+| `/api/cron/snapshot-deal-status` | 毎日 06:40 (JST) | `40 21 * * *` |
+| `/api/cron/staff-slack-link` | 毎日 09:30 (JST) | `30 0 * * *` |
+| `/api/cron/subweb-ochi-sweep` | 毎日 11:00 (JST) | `0 2 * * *` |
+| `/api/cron/sync-calendar` | 1 時間おき | `15 * * * *` |
+| `/api/cron/sync-gmail-sent` | 20,50 * * * * | `20,50 * * * *` |
+| `/api/cron/sync-kintone` | 毎日 06:00 (JST) | `0 21 * * *` |
+| `/api/cron/sync-thankyou-cvr` | 30 0-9 * * * | `30 0-9 * * *` |
+| `/api/cron/sync-thankyou-tab` | 15 分おき | `*/15 * * * *` |
+| `/api/cron/weekly-summary` | 0 0 * * 1 | `0 0 * * 1` |
+
+<!-- AUTOGEN:END propagate-meet-reference -->

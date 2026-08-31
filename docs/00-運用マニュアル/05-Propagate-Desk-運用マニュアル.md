@@ -445,3 +445,70 @@ kintone に line-id が登録されていません。「LINE と kintone を lin
 2. **いつ**（日付と、できれば時刻）
 3. **どのチケットか**（チケットの URL）
 4. **何をしようとしたか**
+
+<!-- AUTOGEN:START propagate-desk-reference -->
+
+<!-- このブロックは propagate-desk の scripts/gen-manual-reference.ts が生成します。
+     手で書き換えても次の生成で消えます。マーカーの外側は生成器が触りません。 -->
+
+# Propagate Desk リファレンス（コードから自動生成）
+
+## 自動で動いている処理（cron）
+
+Desk が自動実行しているバッチ処理 (cron) の一覧。時刻は JST。読み替えると嘘になる式は原文のまま。
+
+| 処理 | 実行タイミング | 内容 |
+| --- | --- | --- |
+| archive-audit-logs | 30 18 * * 1-5 (UTC原文) |  |
+| assign-customer-ids | 平日 10:00 / 14:00 / 18:00 (JST) |  |
+| cleanup-empty-tickets | 30 * * * 1-5 (UTC原文) | メッセージが 1 件もないチケットの「猶予期間」(分)この時 |
+| daily-pending-summary | 平日 09:00 / 13:00 (JST) | 平日 9:00 / 13:00 JST に Slack #p |
+| gmail-watch | 平日 09:00 (JST) |  |
+| kintone-recent-message-sync | 毎日 23:00 (JST) | 直近 24 時間に顧客メッセージを受信した顧客の「顧客情報」 |
+| knowledge-approval-summary | 平日 15:00 (JST) | 平日 15:00 JST に Slack へ「承認待ち + |
+| line-webhook-check | 毎日 毎時 15 分 |  |
+| manual-sync | 毎日 03:00 (JST) | マニュアル設定画面の「設定済みをすべて取り込む」を毎日自動で |
+| message-history-export | 0 1 * * 1 (UTC原文) |  |
+| progress-push | 0 2 * * 1-4 (UTC原文) |  |
+| ps-activity-daily-report | 平日 21:05 (JST) |  |
+| ps-activity-monitor | 平日 09:00〜21:59 5 分おき |  |
+| ps-pace-summary | 平日 12:00 / 15:00 / 18:00 (JST) | 平日 12:00 / 15:00 / 18:00 JST に |
+| request-reminders | 平日 10:00 / 13:00 / 16:00 / 19:00 (JST) | 平日 10:00 / 13:00 / 16:00 / 19: |
+| sales-desk-overdue | 平日 09:00 (JST) | 平日 9:00 JST に、前日18時より前からセールス(営 |
+| send-scheduled-messages | 毎日 毎時 0 分 | 最大 50 通の送信ループのため余裕を取る (Vercel |
+
+## 画面の一覧
+
+Desk に存在する画面です。`[...]` はチケットIDなど個別の値が入る部分です。
+
+| 画面 |
+| --- |
+| / |
+| /admin/analytics/claim-cancel |
+| /admin/analytics/director-kpi |
+| /admin/analytics/open-tickets |
+| /admin/analytics/ps-activity |
+| /customers |
+| /customers/[id] |
+| /login |
+| /logs |
+| /logs/claim-cancel |
+| /logs/error |
+| /logs/progress-push |
+| /requests |
+| /scheduled-messages |
+| /settings |
+| /settings/groups |
+| /settings/knowledge-additions |
+| /settings/knowledge-approvals |
+| /settings/manuals |
+| /settings/mcp |
+| /settings/slack |
+| /settings/ticket-settings |
+| /setup |
+| /survey/[token] |
+| /tickets |
+| /tickets/[id] |
+| /users |
+
+<!-- AUTOGEN:END propagate-desk-reference -->
