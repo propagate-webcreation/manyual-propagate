@@ -10,9 +10,9 @@
 > 使われるため、社内の画面操作を混ぜると返信案が濁ります（2026-08-19 小林さんの指摘）。
 >
 > **なぜマニュアルとして置くのか**
-> Desk でマニュアル（`manual_chunks`）を検索しているのは**社内チャットボットだけ**で、
-> 顧客への返信案（`ai-draft`）は `qa_documents` しか見ません。
-> だからここに社内の手順を書いても返信案には一切入りません。
+> Desk では社内チャットボットと顧客への返信案（`ai-draft`）の両方が、
+> QAナレッジ（`qa_documents`）とマニュアル（`manual_chunks`）を検索します。
+> この文書は **propagate-meet の社内操作手順**として参照し、顧客向けの操作案内とは区別してください。
 >
 > **画面を変えたらここも直してください。**
 > 中身は appo-followup（propagate-meet 本体）のコードから起こしています。
@@ -142,7 +142,7 @@
 
 ---
 
-# 困ったとき（エラーと対処）
+## 困ったとき（エラーと対処）
 
 画面に出るエラー文言・症状から引けるようにまとめています。**文言はコードのものと一致**させてあるので、出ている文字をそのまま検索してください。
 
@@ -150,9 +150,9 @@
 
 ---
 
-## 予約・アポカレンダーで困ったとき
+### 予約・アポカレンダーで困ったとき
 
-### 予約が「対応可能な営業がいません」で取れない
+#### 予約が「対応可能な営業がいません」で取れない
 
 予約が 409 で弾かれたときのメッセージです。**原因は4つあり、画面からは区別できません。**上から順に疑ってください。
 
@@ -163,42 +163,42 @@
 
 ⚠️ **お客様側の予約画面で枠が見えていても失敗することがあります。**枠の表示と実際の割り当てで見ている条件が違うためです。
 
-### 12時台の枠が出ない / 12時で予約すると必ず失敗する
+#### 12時台の枠が出ない / 12時で予約すると必ず失敗する
 
 **12:00〜13:00 は昼休みで、予約枠から除外されています。**表示にも割り当てにも同じ除外がかかります。フル勤務（昼をまたぐ8時間以上）の営業は、ランチ時間が稼働から外れます。
 
 お客様に12時台を希望された場合は、**別の時間帯をご提案**してください。担当固定の個人リンクでも 12:00 は必ず失敗します。
 
-### 予約カレンダーに自分の列が出ない
+#### 予約カレンダーに自分の列が出ない
 
 **Google カレンダー連携が済んでいない営業は、他の人の画面に列が出ません。**（自分でログインしたときは、連携していなくても自分の列だけは出ます。）
 
 - 対処: `/admin/staff` から Google カレンダーを連携してください
 - ⚠️ **連携しても出ない場合**、ログインに使っているメールアドレスが台帳の営業名簿に無い可能性があります（個人の Gmail でログインしている等）。エンジニアに連絡してください
 
-### デモの枠が出ない・選べない
+#### デモの枠が出ない・選べない
 
 **デモは1人1日4件までの上限**があります。上限に達した日は枠が出ません。
 
 - 招待リンク経由は**上限を超えると枠が出ません**
 - 管理画面からの手入力は**ブロックされず、警告とチェックが出ます**。意図的に超える場合のみチェックしてください
 
-### 予約を編集・保存できない（「予約編集は切替日まで無効です」）
+#### 予約を編集・保存できない（「予約編集は切替日まで無効です」）
 
 新しいカレンダーの**本番切替前**に出ます。切替が済むまで編集は反映されません。急ぎの変更はエンジニアに連絡してください。
 
-### Google Meet の URL が発行されない・予定に入っていない
+#### Google Meet の URL が発行されない・予定に入っていない
 
 担当の **Google カレンダー連携が失効**しています（画面にも「担当（名前）の Google カレンダー連携が失効しています」と出ます）。
 
 - 対処: **担当者本人**に `/admin/staff` から再連携してもらってください。本人以外は直せません
 
-### お客様が予約を変更したいと言っている
+#### お客様が予約を変更したいと言っている
 
 - ✅ `https://propagate-meet.com/manage` を送る
 - 🚫 `https://propagate-meet.com/book` は送らない（kintone 側で不具合が起きます）
 
-### 空き枠が実際より多く見える / 予定があるのに枠が出る
+#### 空き枠が実際より多く見える / 予定があるのに枠が出る
 
 Google カレンダーの読み取りは**失敗しても「予定なし」として扱われます**（エラーになりません）。そのため連携が切れていると、全部の枠が空きに見えます。
 
@@ -206,9 +206,9 @@ Google カレンダーの読み取りは**失敗しても「予定なし」と�
 
 ---
 
-## メール配信で困ったとき
+### メール配信で困ったとき
 
-### 追客メールが送られない
+#### 追客メールが送られない
 
 送信されない理由は主に4つです。
 
@@ -221,23 +221,23 @@ Google カレンダーの読み取りは**失敗しても「予定なし」と�
 
 ⚠️ **日次上限は全メール共通**です。上限に達すると、追客だけでなく予約確認などのメールも止まります。
 
-### お客様から「メールを止めてほしい」と言われた
+#### お客様から「メールを止めてほしい」と言われた
 
 管理画面の**除外リストに登録**してください（`/admin/exclusions`）。顧客自身が配信停止リンクを押した場合とは別で、営業側から登録する操作です。
 
 登録すると、以降すべての施策から自動で除外されます。**1件ずつ止める必要はありません。**
 
-### 一斉送信ができない（「いま一斉送信は停止中です」）
+#### 一斉送信ができない（「いま一斉送信は停止中です」）
 
 送信基盤の設定が必要な状態です。**画面からは再開できません。**エンジニアに連絡してください。
 
-### 送ったはずのメールが履歴に見当たらない
+#### 送ったはずのメールが履歴に見当たらない
 
 送信履歴は `/admin/mail-copy`、成果は `/admin/appo-rate` で見られます。
 
 ⚠️ **一斉送信の不達（バウンス）は、便別の集計に出ないことがあります。**「不達0件」を「全部届いた」と読まないでください。
 
-### 契約済みのお客様に追客メールが届いてしまった
+#### 契約済みのお客様に追客メールが届いてしまった
 
 **kintone でレコードを消しても台帳には反映されません。**古い状態が残ったまま追客対象になることがあります。
 
@@ -245,25 +245,25 @@ Google カレンダーの読み取りは**失敗しても「予定なし」と�
 
 ---
 
-## ヒアリングシートで困ったとき
+### ヒアリングシートで困ったとき
 
-### 招待 URL が発行されていない
+#### 招待 URL が発行されていない
 
 kintone から発行依頼を出してください（手順はこのマニュアルの「招待URLが未発行のとき」を参照）。
 
-### ヒアリングシートを「J」以外のレコードで作ってしまった
+#### ヒアリングシートを「J」以外のレコードで作ってしまった
 
 同一案件で kintone レコードが複数あるとき、**契約対象の「J」以外**で作ると、ヒアリング情報を正しく取得できなくなります。作り直してください。
 
-### ヒアリング回答が制作進行シートに転記されない
+#### ヒアリング回答が制作進行シートに転記されない
 
 管理画面から**再転記**できます（このマニュアルの「ヒアリング回答が制作進行シートに転記されないとき」を参照）。
 
 ---
 
-## kintone 連携で困ったとき
+### kintone 連携で困ったとき
 
-### 「kintoneレコード作成に失敗しました」「kintoneレコード更新に失敗しました」
+#### 「kintoneレコード作成に失敗しました」「kintoneレコード更新に失敗しました」
 
 原因は2つです。
 
@@ -272,15 +272,15 @@ kintone から発行依頼を出してください（手順はこのマニュア
 
 ⚠️ 2 の場合、「一部フィールドを落として作成」という通知が出て、**商談は作られるが担当だけ空**になることがあります。担当が空のレコードを見つけたらこれを疑ってください。設定変更はエンジニア側の作業です。
 
-### デモデザ提案日が kintone に入らない
+#### デモデザ提案日が kintone に入らない
 
 **招待リンク（`/demo/...`）経由で取られた予約はほぼ確実に入ります。**入らないのは管理画面から手入力した分です。手入力した場合は kintone 側も手で入れてください。
 
 ---
 
-## 商談の採点・フィードバックで困ったとき
+### 商談の採点・フィードバックで困ったとき
 
-### 商談のフィードバックが Slack に来ない
+#### 商談のフィードバックが Slack に来ない
 
 営業側の操作ミスではないことがほとんどです。順に確認してください。
 
@@ -289,34 +289,34 @@ kintone から発行依頼を出してください（手順はこのマニュア
 
 どちらもエンジニア側の対処が必要です。**対象の商談日と会社名**を添えて連絡してください。
 
-### 文字起こしが見つからない・開けない
+#### 文字起こしが見つからない・開けない
 
 Google ドライブ上のファイル名が会議コード名のままになっている可能性が高いです。**日付と参加者から探して、案件名にリネーム**してください。
 
-### 自分の点数を見たい
+#### 自分の点数を見たい
 
 `/admin/my-score`（自分のスコア）、`/admin/skill`（商談スキル）、`/admin/meeting-fb`（商談FB）で見られます。
 
 ---
 
-## ログイン・権限で困ったとき
+### ログイン・権限で困ったとき
 
-### ログインできない / 「HTTP 403 — 権限がありません」
+#### ログインできない / 「HTTP 403 — 権限がありません」
 
 - 会社の Google アカウントでログインしているか確認してください
 - それでも入れない場合、アカウントが許可リストに入っていない可能性があります。エンジニアに連絡してください
 
-### 「あなたのスタッフ情報が見つかりません」
+#### 「あなたのスタッフ情報が見つかりません」
 
 ログイン中のメールアドレスが**営業名簿に登録されていません**。エンジニアに登録を依頼してください。
 
-### 「セッションが無効です。やり直してください。」
+#### 「セッションが無効です。やり直してください。」
 
 一定時間操作しないと出ます。**再ログインすれば直ります。**
 
 ---
 
-## エンジニアに連絡するとき
+### エンジニアに連絡するとき
 
 以下を添えてください。これが無いと調査できません。
 
@@ -329,7 +329,7 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 
 ---
 
-## Desk との住み分け
+### Desk との住み分け
 
 | | 使うシステム |
 |---|---|
@@ -340,7 +340,7 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 
 ---
 
-# 仕組み編（システムが自動でやっていること）
+## 仕組み編（システムが自動でやっていること）
 
 ここは**画面操作ではなく、誰も押していないのに動いているもの**の説明です。
 「なぜこの日からしか予約できないのか」「あのメールはいつ飛ぶのか」「催促が止まらないのはなぜか」に答えるための節で、
@@ -350,9 +350,9 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 
 ---
 
-## 契約者デモ提案（デモデザ提案）の招待
+### 契約者デモ提案（デモデザ提案）の招待
 
-### デモ提案の招待メールはいつ送られるか（送信解禁日 = 請求開始月の前月25日）
+#### デモ提案の招待メールはいつ送られるか（送信解禁日 = 請求開始月の前月25日）
 
 招待は**営業が送るものではなく、制作進行シートを見ている自動処理が送っています**。
 
@@ -364,7 +364,7 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 
 「まだ送られていない」と思ったら、まず**請求開始月**を見てください。25日前なら仕様どおりです。
 
-### 招待が出ないまま止まっている理由（デモ提案ログの status）
+#### 招待が出ないまま止まっている理由（デモ提案ログの status）
 
 保留・見送りは全部「デモ提案ログ」タブに理由が残り、Slack にも出ます。よくあるのは次のとおりです。
 
@@ -379,7 +379,7 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 | `hold_staff_match` / `hold_staff_ambiguous` | 担当営業の名前が営業名簿と突き合わせられない | 名簿側の登録をエンジニアに依頼 |
 | `hold_email` | kintone のメール欄が空 | メールを入れる |
 
-### 顧客が選べる最短の日はいつか（請求開始月1日＋5営業日）
+#### 顧客が選べる最短の日はいつか（請求開始月1日＋5営業日）
 
 招待リンクを開いたお客様に出る「予約可能日」は、次のうち**いちばん遅い日**です。
 
@@ -393,7 +393,7 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 
 顧客ページに出るのは**予約可能日から14日ぶん**だけで、**デモは30分枠**です。
 
-### 予約が入らないときの催促メール（+3日 / +7日 / +14日）
+#### 予約が入らないときの催促メール（+3日 / +7日 / +14日）
 
 招待を送ったのに予約が入らないと、**招待を送った日から3日後・7日後・14日後の朝9時**に催促が飛びます。**3通で打ち切り**です。
 
@@ -407,7 +407,7 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 ⚠️ **管理画面から手入力でデモ商談を入れても、招待は「招待中」のまま残ります。**
 日付_11 を入れないと、**すでに会ったお客様に催促が飛び続けます**（実際に商談当日と2週間後に催促が飛んだ事故があります）。手入力したら日付_11 を必ず埋めてください。
 
-### 招待リンクから予約が入ったあと、自動で起きること
+#### 招待リンクから予約が入ったあと、自動で起きること
 
 - **kintone の「デモデザ提案日」（日付_11）に予約日が書き戻されます**（契約済み＝受注Jの案件だけ）
 - **Google Meet の URL は予約が作られた時点で発行**され、確認メールに入ります
@@ -415,9 +415,9 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 
 ---
 
-## 予約枠のルール
+### 予約枠のルール
 
-### 枠が出る条件と、枠の長さ
+#### 枠が出る条件と、枠の長さ
 
 - 初回アポは**60分・:00 開始**で出ます
 - 枠が出るのは「**シフトが入っている × そのサービスに対応できる × 他の予約と重ならない × Google カレンダーが空いている**」営業がいる時間だけです
@@ -426,12 +426,12 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 
 ⚠️ Google カレンダーの読み取りは**失敗しても「予定なし」として扱われます**。連携が切れていると全枠が空きに見えます。また**ゲストが0人の個人予定は枠を塞ぎません**。
 
-### 昼休み（12:00〜13:00）はいつから予約できるか
+#### 昼休み（12:00〜13:00）はいつから予約できるか
 
 12:00〜13:00 に重なる枠は塞がれています。**2026年9月1日以降の「予約日」から昼も予約可**になります（判定は予約日であって、登録した日ではありません）。
 それまでは表示にも割り当てにも同じ除外がかかるので、12時台は必ず失敗します。
 
-### デモ枠が1日4件までなのはなぜか
+#### デモ枠が1日4件までなのはなぜか
 
 **1営業・1日あたりデモは4件まで**です。しかも**シフト内の「時」ブロック単位**で、すでに何か予約が入っている「時」を優先して出します。
 
@@ -445,16 +445,16 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 - **招待リンク経由は上限を超えると枠が出ません**
 - **管理画面の手入力はブロックされず、警告＋チェック**が出ます（意図的に超えるとき用）
 
-### 無料デモサイト作成の予約が「12時間後から」しか取れない理由
+#### 無料デモサイト作成の予約が「12時間後から」しか取れない理由
 
 サービス「デモサイト無料作成」だけ**最短リードタイム12時間**が設定されています。**予約した時点から12時間後以降の枠**しか出ません（ホームページ案を作る時間）。
 他のサービスには時間の下限はありません。
 
 ---
 
-## 予約に付いてくるメール
+### 予約に付いてくるメール
 
-### 予約が入ってから商談までに自動で送られるメール
+#### 予約が入ってから商談までに自動で送られるメール
 
 | いつ | 何が | 対象 |
 |---|---|---|
@@ -467,7 +467,7 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 いずれも**承認済みの文面が無ければ送りません**（勝手な文面は出ない代わりに、未承認だと無言で止まります）。
 また**配信停止（除外リスト）に入っている宛先には送りません**。「送らなかった」「送れなかった」は予約ごとに記録されているので、後から追えます。
 
-### 事前視聴動画が付く予約・付かない予約
+#### 事前視聴動画が付く予約・付かない予約
 
 動画は1本しかなく、内容は**ホームページ制作の説明**です。そのため送るのは次の2つだけです。
 
@@ -479,9 +479,9 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 
 ---
 
-## ヒアリングシート
+### ヒアリングシート
 
-### kintone で「発行依頼する」を押したあと、何が自動で走るか
+#### kintone で「発行依頼する」を押したあと、何が自動で走るか
 
 1. **商談の文字起こしを Google ドライブから探します**
 2. 文字起こしから**事前入力**（お客様が書く手間を減らす下書き）を作ります
@@ -491,7 +491,7 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 バッチは **JST 7時台〜22時台の15分ごと**に回っていて、webhook の取りこぼし救済・「リトライ中」の再処理・放置リマインド・発行漏れ検知も同じバッチが見ています。
 送信に失敗した行は**15分ごとに自動で再送**されます。管理画面から出した依頼は、10分ごとのバッチが**発行完了を待ってから**選んだ文面で送ります。
 
-### 文字起こしが見つからないとき（60分待って、事前入力なしで発行）
+#### 文字起こしが見つからないとき（60分待って、事前入力なしで発行）
 
 **文字起こしが60分たっても見つからない場合、事前入力なし（白紙）で発行して送ります。**
 
@@ -505,7 +505,7 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 
 このとき営業には「文字起こしなしで送信しました」（報告であって作業依頼ではありません）、エンジニアには「どこを探したか」つきの通知が別々に飛びます。
 
-### 「発行済み」なのに招待URLが無い行の戻し方（再依頼する）
+#### 「発行済み」なのに招待URLが無い行の戻し方（再依頼する）
 
 バリデーションで中止になった行は、**招待URLが無いまま「発行済み」になります**。この状態から発行し直す出口は kintone のプロセスアクション「**再依頼する**」だけです。
 
@@ -513,9 +513,9 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 
 ---
 
-## 追客メール（掘り起こし）
+### 追客メール（掘り起こし）
 
-### 誰に自動で送られるのか（7つのリスト）
+#### 誰に自動で送られるのか（7つのリスト）
 
 **毎朝（JST 6〜7時台）**、台帳が kintone とシートを読み直して**対象リストを作り直し**、その日に送るぶんをキューに入れます。営業が対象を選ぶ操作はありません。実際の送信は **JST 9時〜18時の毎時**、上限まで消化する形で流れます。
 
@@ -533,7 +533,7 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 
 ⚠️ **除外は人ではなく台帳がやります。**契約済み（J）・契約不可・反社・配信停止は毎朝の更新で自動的に外れるので、送信前に1件ずつ kintone を目視する必要はありません。
 
-### 送信が止まる4つの理由
+#### 送信が止まる4つの理由
 
 | 理由 | 意味 |
 |---|---|
@@ -546,16 +546,16 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 
 ---
 
-## 商談の採点（商談品質）
+### 商談の採点（商談品質）
 
-### 採点はいつ動くか
+#### 採点はいつ動くか
 
 **5分ごと**に、文字起こしがある未採点の商談を探して採点します。**Google ドライブに文字起こしが入ってから15分以内に Slack のカードが出る**のが設計上の目標です。
 文字起こしがまだ無い商談は理由を記録して次回に回すので、**ドライブに入り次第、自動で拾われます**。営業側の操作は要りません。
 
 1回の実行で採点できるのは数件までなので、**前の商談で詰まると後続が流れません**。「採点が出ない」ときはここを疑ってください（対処はエンジニア側）。
 
-### 「再アポ推奨」（即時アラート）が出る条件
+#### 「再アポ推奨」（即時アラート）が出る条件
 
 対象は **kintone のステータスが C か D の商談だけ**です（J・A・B・オチでは出ません）。そのうえで、
 
@@ -570,7 +570,7 @@ Google ドライブ上のファイル名が会議コード名のままになっ�
 
 ---
 
-## kintone に自動で書き戻されるもの
+### kintone に自動で書き戻されるもの
 
 propagate-meet から kintone へ**自動で書かれる**のは次のものだけです。ほかは全部「読むだけ」です。
 
@@ -585,75 +585,91 @@ propagate-meet から kintone へ**自動で書かれる**のは次のものだ�
 
 ⚠️ **管理画面から手入力した予約は書き戻されません。**手入力したら kintone 側も手で入れてください。
 
+### 納品後のPS電話相談
+
+- 顧客向け予約ページは `https://propagate-meet.com/ps-phone`。アノテーターの納品済みサイトから開き、日時を選んで予約する。会社名・電話番号は必須、名前・備考は任意。相談の種類やサイト名の入力は不要。予約URLにはサイトIDだけを渡し、社内のサイト名は含めない。
+- 管理は「アポ予約 → PS電話相談」（`/admin/booking/ps`）。初期担当は的場真暁さん。PS担当者を追加し、担当者ごとにシフトを登録する。営業予約とは別枠で管理される。
+- 電話は1回10分、予約開始も10分刻み。翌日から14日先までの登録済みシフトだけ予約できる。Googleカレンダーの空きではなく、このシフトが予約枠になる。
+- 予約確定後は担当者にSlack DM。会社名・電話番号・名前・備考・通知結果を管理画面で確認する。サイトIDがある予約には、アノテーターの対象サイト管理画面（`https://www.propagate-annotator.com/admin/sites/<site_id>`）へのリンクを表示する。通知失敗時は再試行できる。
+- 変更の相談があれば既存予約をキャンセルし、再予約していただく。確定予約がある枠はシフトを削除・短縮できない。
+- 制作中のTimeRexリンクは従来どおり。古いTimeRex URLを保存している顧客からの予約は、TimeRex側で受付停止しない限り止まらない。
+
 <!-- AUTOGEN:START propagate-meet-reference -->
 
 > ここから下は **propagate-meet のコードから自動生成** しています。
 > 手で直しても次の生成で上書きされます。中身を変えたいときはコードを直してください。
 > 生成元: propagate-infra/appo-followup `scripts/gen-meet-manual-reference.mts`
 
-## kintone フィールド対応表
+### kintone フィールド対応表
 
 「kintone の◯◯はどこに入れますか」に答えるための表です。
 
 | kintone フィールド | 意味 | コード上の名前 | 定義場所 |
 |---|---|---|---|
-| `チェックボックス` | 電話アポ有無 (チェックボックス) / 電話アポ有無 (チェックボックス)。ビューの絞り込み条件③。 | phoneAppt, KINTONE_PHONE_APPT_FIELD, PHONE_APPOINTMENT_FIELD | src/core/appo-feedback/target.ts, src/core/appointment-ops.ts |
-| `ドロップダウン_0` | リード経路 (kintone フィールドコード)。 / リード経路 (ドロップダウン)。何がきっかけで来た商談か / リード経路のフィールドコード (必須・DROP_DOWN) | LEAD_ROUTE_FIELD, leadRoute, KINTONE_LEAD_ROUTE_FIELD | src/core/seo-funnel.ts, src/core/today-appo/fields.ts |
-| `ドロップダウン_12` | — | firstAppoStatusDropdownField | src/infrastructure/kintone/cross-sell-reader.ts |
+| `チェックボックス` | 電話アポ有無 (チェックボックス) / 電話アポ有無 (チェックボックス)。ビューの絞り込み条件③。 | phoneAppt, KINTONE_PHONE_APPT_FIELD, phoneAppoField, PHONE_APPOINTMENT_FIELD | src/core/appo-feedback/target.ts, src/core/appointment-ops.ts |
+| `ドロップダウン_0` | リード経路 (kintone フィールドコード)。 / リード経路 (ドロップダウン)。何がきっかけで来た商談か / リード経路のフィールドコード (必須・DROP_DOWN) | LEAD_ROUTE_FIELD, leadRoute, leadRouteField, KINTONE_LEAD_ROUTE_FIELD | src/core/seo-funnel.ts, src/core/today-appo/fields.ts |
+| `ドロップダウン_12` | — | firstAppoStatusDropdownField, dropdown | src/infrastructure/kintone/ad-db-reader.ts, src/infrastructure/kintone/cross-sell-reader.ts |
 | `ドロップダウン_3` | 検討理由 (ドロップダウン)。営業が商談後に手で選んだ一次情報 | considerReason | src/core/appo-feedback/target.ts, src/core/today-appo/fields.ts |
 | `ラジオボタン` | 契約プラン (BASIC(9,800円) 等) | plan, swPlan | src/core/hearing-issue.ts, src/core/sales-payroll/extract.ts |
 | `ラジオボタン_12` | サイト制作形式 (LP / 採用LP / basic CP / standard CP / advance CP / その他) / 発行パイプラインはこの 2 つが埋まっていないと発行せず打ち切るため、画面でも読む。 | siteFormat | src/core/hearing-issue.ts, src/infrastructure/kintone/hearing-sheet-reader.ts |
 | `ラジオボタン_9` | kintone「後追い (初回アポ欠席)」ラジオのフィールドコード。read (parse) と write (NG転記) 共通。 | KINTONE_FOLLOWUP_FIELD | src/core/kintone.ts |
 | `開始月_1` | — | contractMonthField, swMonth, contractMonth, month | src/app/admin/sales-dashboard/_legacy/services.ts, src/core/sales-dashboard/services.ts |
-| `開始月_10` | — | contractMonth | src/infrastructure/kintone/booking-record-mapper.ts |
+| `開始月_10` | — | agentMonth, contractMonth, month | src/core/sales-payroll/extract.ts, src/infrastructure/kintone/booking-record-mapper.ts |
 | `開始月_2` | — | billingStart | src/infrastructure/kintone/contract-reader.ts |
 | `開始月_3` | — | contractMonth | src/infrastructure/kintone/booking-record-mapper.ts |
-| `開始月_6` | — | contractMonthField, adMonth, contractMonth, month | src/app/admin/sales-dashboard/_legacy/services.ts, src/core/sales-dashboard/services.ts |
-| `開始月_8` | — | contractMonthField, ssMonth, contractMonth, ssContractMonthField, month | src/app/admin/sales-dashboard/_legacy/services.ts, src/core/sales-dashboard/services.ts |
-| `日付_0` | 日付_0 初回アポイント日 / 初回アポイント日。日時変更/再アポで上書きされる「現在のアポ日」(初回限定ではない) / 日付_0 アポ予定日。ラベルは「初回アポイント日」だがリスケで上書きされる「現在のアポ日」 / 初回アポイント日 (日付_0) のフィールドコード (env `KINTONE_FIRST_APPT_DATE_FIELD` で差替可)。 / kintone `日付_0` 初回アポ日。成約率の分母と推移グラフのアポ面に使う。 | firstApptDate, KINTONE_FIRST_APPT_DATE_FIELD, KINTONE_APPOINTMENT_DATE_FIELD, FIRST_APPOINTMENT_DATE_FIELD, FIRST_APPO_FIELD, APPOINTMENT_FIELD, FIRST_APPOINTMENT_FIELD | src/core/appo-feedback/target.ts, src/core/appointment-ops.ts |
-| `日付_11` | — | demoProposedField | src/infrastructure/kintone/cross-sell-reader.ts |
-| `日付_2` | — | jConfirmedOn, jConfirmedField, J_CONFIRMED_FIELD | src/core/sales-payroll/extract.ts, src/infrastructure/kintone/cross-sell-reader.ts |
-| `日付_5` | 結論確認予定日 (日付)。追客メールの送付タイミングの起点でもある | conclusionCheckDate | src/core/appo-feedback/target.ts |
-| `日付_6` | — | aConfirmedField | src/infrastructure/kintone/cross-sell-reader.ts |
-| `複数選択_13` | — | demoProposalServicesField | src/infrastructure/kintone/cross-sell-reader.ts |
-| `複数選択_17` | — | firstAppoStatusMultiField | src/infrastructure/kintone/cross-sell-reader.ts |
+| `開始月_6` | — | contractMonthField, adMonth, adContractMonthField, contractMonth, month | src/app/admin/sales-dashboard/_legacy/services.ts, src/core/sales-dashboard/services.ts |
+| `開始月_8` | 契約月(契約予定月/スマートSEO)。J・JA はこの軸で数える (NUMBER なので値は "2608")。 | contractMonthField, ssMonth, contractMonth, ssContractMonthField, month, CONTRACT_MONTH_FIELD | src/app/admin/sales-dashboard/_legacy/services.ts, src/core/sales-dashboard/services.ts |
+| `日付_0` | 日付_0 初回アポイント日 / 初回アポイント日。日時変更/再アポで上書きされる「現在のアポ日」(初回限定ではない) / 日付_0 アポ予定日。ラベルは「初回アポイント日」だがリスケで上書きされる「現在のアポ日」 / 初回アポイント日 (日付_0) のフィールドコード (env `KINTONE_FIRST_APPT_DATE_FIELD` で差替可)。 / kintone `日付_0` 初回アポ日。成約率の分母と推移グラフのアポ面に使う。 | firstApptDate, KINTONE_FIRST_APPT_DATE_FIELD, KINTONE_APPOINTMENT_DATE_FIELD, firstAppoField, FIRST_APPOINTMENT_DATE_FIELD, FIRST_APPO_FIELD, APPOINTMENT_FIELD, FIRST_APPOINTMENT_FIELD | src/core/appo-feedback/target.ts, src/core/appointment-ops.ts |
+| `日付_11` | デモデザ提案日 (デモクロスセル行の予約・実施の軸)。クロスセル表と同じフィールド。 | demoProposedField, DEMO_PROPOSED_FIELD | src/infrastructure/kintone/ad-db-reader.ts, src/infrastructure/kintone/cross-sell-reader.ts |
+| `日付_2` | — | jConfirmedOn, jConfirmedField, J_CONFIRMED_FIELD | src/core/sales-payroll/extract.ts, src/infrastructure/kintone/ad-db-reader.ts |
+| `日付_5` | 結論確認予定日 (日付)。追客メールの送付タイミングの起点でもある | conclusionCheckDate, conclusionDateField | src/core/appo-feedback/target.ts, src/infrastructure/kintone/ad-follow-up-reader.ts |
+| `日付_6` | — | aConfirmedField | src/infrastructure/kintone/ad-db-reader.ts, src/infrastructure/kintone/cross-sell-reader.ts |
+| `複数選択_13` | クロスセル提案サービス（デモデザイン提案）。「受注済み（スマートSEO）」の印を持つ複数選択。 | demoProposalServicesField, DEMO_PROPOSAL_SERVICES_FIELD | src/infrastructure/kintone/ad-db-reader.ts, src/infrastructure/kintone/cross-sell-reader.ts |
+| `複数選択_17` | — | firstAppoStatusMultiField, multi | src/infrastructure/kintone/ad-db-reader.ts, src/infrastructure/kintone/cross-sell-reader.ts |
 | `複数選択_4` | kintone `複数選択_4` サブスクAd の契約プラン (MULTI_SELECT)。選択値すべての月額を合算して契約金額にする。Ad の報酬もこの金額から出る (契約金額 × 4 ヶ月 × 10%)。 | AD_PLAN_FIELD | src/lib/sales-payroll/build.ts |
-| `文字列__1行_` | 企業名。ラベルは「パートナー名（サイト名）」だが値は顧客企業名 (株式会社… 等) | companyName, COMPANY_FIELD | src/core/appo-feedback/target.ts, src/core/hearing-issue.ts |
-| `文字列__1行__1` | 先方氏名 (文字列1行) / 先方氏名。宛名に使う (空なら「ご担当者様」) | customerName, contactName | src/core/appo-feedback/target.ts, src/core/hearing-issue.ts |
-| `文字列__1行__23` | 連絡用アドレス。記入があれば送信先として登録メールより優先する | contactEmail | src/core/hearing-issue.ts, src/infrastructure/kintone/hearing-sheet-reader.ts |
-| `文字列__1行__3` | — | email, emailField | src/core/hearing-issue.ts, src/infrastructure/kintone/hearing-sheet-reader.ts |
+| `文字列__1行_` | 企業名。ラベルは「パートナー名（サイト名）」だが値は顧客企業名 (株式会社… 等) | companyName, companyNameField, partnerNameField, COMPANY_FIELD, partner | src/core/appo-feedback/target.ts, src/core/hearing-issue.ts |
+| `文字列__1行__1` | 先方氏名 (文字列1行) / 先方氏名。宛名に使う (空なら「ご担当者様」) | customerName, contactName, customerNameField | src/core/appo-feedback/target.ts, src/core/hearing-issue.ts |
+| `文字列__1行__23` | 連絡用アドレス。記入があれば送信先として登録メールより優先する | contactEmail, emailContact | src/core/hearing-issue.ts, src/infrastructure/kintone/hearing-sheet-reader.ts |
+| `文字列__1行__24` | — | emailBilling | src/infrastructure/kintone/subweb-cross-sell-reader.ts |
+| `文字列__1行__3` | — | email, emailRegistered, emailField | src/core/hearing-issue.ts, src/infrastructure/kintone/hearing-sheet-reader.ts |
 | `文字列__1行__8` | 検討理由 (詳細・自由入力)。ドロップダウンでは分からない事情が書かれている | considerReasonDetail | src/core/appo-feedback/target.ts |
-| `文字列__1行__9` | 電話番号 (再アポ架電用) | phone | src/core/appo-feedback/target.ts |
+| `文字列__1行__9` | 電話番号 (再アポ架電用) | phone | src/core/appo-feedback/target.ts, src/infrastructure/kintone/subweb-cross-sell-reader.ts |
 
-## 管理画面の一覧
+### 管理画面の一覧
 
-追客台帳 (propagate-meet) の画面です。全 58 画面。
+追客台帳 (propagate-meet) の画面です。全 69 画面。
 
 | 画面 | URL |
 |---|---|
 | ダッシュボード | `/admin` |
-| — | `/admin/alerts` |
+| アラート | `/admin/alerts` |
 | — | `/admin/appo-feedback` |
 | アポ予約率 | `/admin/appo-rate` |
+| AIデスク | `/admin/appo-rate/ai-desk` |
+| 実施率の内訳 | `/admin/appo-rate/holding` |
+| 放置商談 (N のまま) | `/admin/appo-rate/stuck-n` |
 | ナレッジの穴 | `/admin/ask/gaps` |
 | アポ予約 | `/admin/booking` |
 | 予約メールの流れ | `/admin/booking-mail-flow` |
-| — | `/admin/booking/demo-proposals` |
+| 契約者デモ提案 | `/admin/booking/demo-proposals` |
 | — | `/admin/booking/hearing-sheet` |
-| — | `/admin/booking/links` |
+| 調整リンク | `/admin/booking/links` |
 | — | `/admin/booking/links/subweb-reappo` |
-| — | `/admin/booking/reservations` |
-| — | `/admin/booking/services` |
-| — | `/admin/booking/shifts` |
+| PS電話相談 | `/admin/booking/ps` |
+| 予約管理 | `/admin/booking/reservations` |
+| サービス | `/admin/booking/services` |
+| シフト | `/admin/booking/shifts` |
 | — | `/admin/booking/week` |
 | 配信の中身 | `/admin/cadence` |
+| 架電リスト | `/admin/call-lists` |
+| 架電者別 | `/admin/call-owners` |
 | 架電報告の照合 | `/admin/call-report` |
 | 対応状況 | `/admin/call-results` |
 | 送信ログ | `/admin/campaigns` |
-| — | `/admin/click-tracking` |
-| — | `/admin/conflicts` |
+| 動画クリック計測 | `/admin/click-tracking` |
+| 名寄せ要確認 | `/admin/conflicts` |
 | 問い合わせ・CVR | `/admin/cvr` |
-| — | `/admin/demo-followups` |
+| デモサイトCV追客 | `/admin/demo-followups` |
 | 無料デモサイト | `/admin/demo-jobs` |
 | 除外リスト | `/admin/exclusions` |
 | 手動発行 | `/admin/hearing/issue` |
@@ -663,19 +679,21 @@ propagate-meet から kintone へ**自動で書かれる**のは次のものだ�
 | 台帳 | `/admin/leads` |
 | — | `/admin/lists` |
 | システムログ | `/admin/logs` |
+| 専用ページ別ファネル | `/admin/lp-funnel` |
 | — | `/admin/mail-copy` |
 | — | `/admin/mail-lane` |
-| — | `/admin/mail-queue` |
+| 配信キュー (mail_queue) | `/admin/mail-queue` |
 | 成果 | `/admin/mail-results` |
 | 一斉送信 | `/admin/mailout` |
 | — | `/admin/mailout/confirm` |
 | 商談FB | `/admin/meeting-fb` |
-| — | `/admin/meeting-fb/amendments` |
-| 再生成 | `/admin/meeting-quality` |
+| 採点基準の承認 | `/admin/meeting-fb/amendments` |
+| 採点の再生成 | `/admin/meeting-quality` |
+| クロスセル判定 | `/admin/meeting-quality/cross-sell` |
 | 自分のスコア | `/admin/my-score` |
 | 欠席者 | `/admin/no-show` |
-| — | `/admin/notifications` |
-| — | `/admin/page-usage` |
+| 通知の棚卸し | `/admin/notifications` |
+| 画面の利用実態 | `/admin/page-usage` |
 | 商談前の準備 | `/admin/prep` |
 | サイアポ | `/admin/reappo` |
 | 評価のものさし | `/admin/rubric` |
@@ -684,23 +702,31 @@ propagate-meet から kintone へ**自動で書かれる**のは次のものだ�
 | セミナー | `/admin/seminars` |
 | SEO経路別ファネル | `/admin/seo-funnel` |
 | 商談スキル | `/admin/skill` |
-| — | `/admin/skill/b-stock` |
+| B在庫の棚卸し | `/admin/skill/b-stock` |
+| 不通SMS | `/admin/sms-followup` |
 | スタッフ | `/admin/staff` |
+| 既存客クロスセル | `/admin/subweb-cross-sell` |
 | 文面 | `/admin/templates` |
 | お礼コール | `/admin/thank-you` |
+| 今日の対応 | `/admin/today` |
 | 当日アポ速報 | `/admin/today-appo` |
 
-## 対応が必要な通知
+### 対応が必要な通知
 
 Slack に流れる通知のうち、**誰かが期限内に動く必要があるもの**です。
 
 | 通知 | どこに出るか | 誰が・いつまでに・何をするか |
 |---|---|---|
+| サブスクAd 結論確認予定日の超過 (18時) | AD_FOLLOW_UP_OVERDUE_SLACK_CHANNEL 既定 #sales-結論確認チャンネル (2026-09-14 まで #sales-アポ結果報告) | 名指しされた担当営業が翌営業日までに結論を取りに行く (or 結論確認予定日を引き直す) |
+| アポ結果速報 (11時/15時/締め) | APPO_RESULT_REPORT_SLACK_CHANNEL 既定 #sales-アポ結果報告 | 名指しされた担当営業が当日中に kintone の受注ステータス (N のまま) を更新する |
 | 同一顧客の重複予約 | SLACK_CHANNEL_SALES 既定 | 担当営業が当日中にどちらを残すか決める |
 | 予約の書き込み失敗アラート | SLACK_CHANNEL_SALES 既定 | 担当営業が当日中に管理画面で予約を作り直す |
+| 予約リンクの申し込み失敗 (本人の連絡先つき) | BOOKING_LINK_FAILURE_SLACK_CHANNEL (既定 C0BPEK3GQQ1 = 非公開 #sales-partner-entry)。投稿は APPO_FEEDBACK_SLACK_TOKEN のアプリ (automation) で行う。off で停止 | 担当営業が当日中に本人へ連絡し、別の枠で取り直す (理由が「保存処理の失敗」なら開発へ) |
 | 当日アポ速報 (担当メンション) | sales-当日アポ通知 (SAME_DAY_APO_SLACK_CHANNEL。未設定なら出ない) | 名指しされた担当営業がアポ開始までに準備する。出られないならその場で共有し代わりを立てる |
 | 予約お礼コール | #sales-お礼電話用 | 担当営業が当日中にお礼コールを入れて記録する |
+| 通電率低下 | #sales-callstaff勤怠 (SLACK_CHANNEL_CALLSTAFF 既定) | コールスタッフがその場で架電先リスト・かけ方を切り替える |
 | 架電ペース低下 | #sales-callstaff勤怠 (SLACK_CHANNEL_CALLSTAFF 既定) | コールスタッフがその場で架電を再開する |
+| 獲得率低下 | #sales-callstaff勤怠 (SLACK_CHANNEL_CALLSTAFF 既定) | 営業リーダーが当日中にトーク内容を確認し、コールスタッフへ共有する |
 | 予約の棄却 | #sales-アポ通知アポ設定 (SLACK_CHANNEL_SALES 既定) | 担当営業が当日中に管理画面で予約を作り直す |
 | 新しいお問い合わせ | #sales-アポ通知アポ設定 (SLACK_CHANNEL_SALES 既定) | 架電担当が即架電する (マニュアル『即架電徹底＆直近CVがついた順番から架電』) |
 | 新しいお問い合わせ (FDE / AIデスク) | #aiデスク-アポ通知 (CV_NOTIFY_CHANNEL_FDE 既定 C0BU2JLV75Y) | FDE 担当が即架電する (既定チャンネルの cv.inquiry と同じ運用) |
@@ -713,26 +739,40 @@ Slack に流れる通知のうち、**誰かが期限内に動く必要がある
 | ⚠️ 要確認 (発行済み・重複検出など) | #ヒアリングフォーム送信 (HEARING_NOTIFY_CHANNEL 既定) | 担当営業が当日中に既存URLを顧客へ渡す (既に送信済みのケースは 2026-08-26 から呼ばない) |
 | 以下漏れ案件 | #新ヒアリングフォーム回答確認ch (固定) | 運用担当が当日中に該当案件を片付ける |
 | 制作進行に転記されていない案件です | #新ヒアリングフォーム回答確認ch (固定) | 運用担当が当日中に制作進行へ行を作る |
+| アポ録画メモを自動で埋められませんでした (無料デモ流用) | SLACK_ERROR_CHANNEL 既定 #automation-アポ日程設定 | 渡邉が翌営業日までに、制作進行シートの行 (J 転記) と商談の文字起こしの有無を確かめて AE列 を埋める |
 | ヒアリング状況通知 (送付済み・未回答が7日以上 など) | HEARING_STATUS_ALERT_SLACK_CHANNEL 既定 #ヒアリングフォーム送信 | 担当営業が当日中に顧客へ催促する |
+| 集客エージェントの問い合わせを遅れて取り込んだ | #sales-アポ通知アポ設定 (AGENT_FORM_ALERT_SLACK_CHANNEL > CV_NOTIFY_SLACK_CHANNEL 既定) | 架電担当が /admin/cvr で当該顧客に即架電する (問い合わせから時間が経っているので当日中) |
 | 重複送信の検知 | ALERT_SLACK_CHANNEL (未設定) → 従来チャンネル | エンジニアが当日中に送信を止めて原因を特定する |
+| バウンス/返信検知の要対応エラー | SLACK_ERROR_CHANNEL 既定 #automation-アポ日程設定 | エンジニアが当日中に、配信停止の手動登録か原因の修正 (認証切れなら GMAIL_REFRESH_TOKEN の再発行) をする |
+| 止まったメールの検知 | ALERT_SLACK_CHANNEL (未設定) → 従来チャンネル | 渡邉が翌営業日までに、送る相手が来ていないのか・取り込みや検知が壊れているのかを確かめる |
 | 事前動画のクリックが 0 のまま | ALERT_SLACK_CHANNEL (未設定) → SLACK_ERROR_CHANNEL | エンジニアが当日中に計測経路を確認する |
 | 採点基準の追補の承認依頼 (日次) | #sales-商談品質 (MEETING_QUALITY_SLACK_CHANNEL) | 営業リーダーが翌営業日までに承認 / 却下する |
-| 初回アポ欠席カード | NO_SHOW_REPORT_SLACK_CHANNEL 既定 #sales-アポ結果報告 | 担当営業が当日中にスレッドへ当日対応を記録する |
-| 既に商談化(bcd)している先方に別の予約が入った | #sales-アポ通知アポ設定 (SLACK_CHANNEL_SALES 既定) | 担当営業が当日中にどちらの商談として扱うか決める |
-| 初回アポ欠席なのに今後アポが入っている顧客 | #sales-アポ通知アポ設定 (SLACK_CHANNEL_SALES 既定) | 担当営業が当日中にリストから外す (掘り起こしメールが飛ぶのを止める) |
-| 👤 初めてログインした人を台帳に追加しました | SLACK_ERROR_CHANNEL 既定 #automation-アポ日程設定 | /admin/staff で権限 (営業/管理者) と姓 (kintone 受注担当と同表記) を当日中に確認する。営業でなければ削除する |
-| 担当メンションが飛ばないスタッフが居ます | SLACK_ERROR_CHANNEL 既定 #automation-アポ日程設定 | /admin/staff で Slack ユーザー ID を入れる (入れるまでその人は担当メンションから外れ続ける) |
+| Meet 文字起こしムーバーの異常 | #sales-商談品質 (MEETING_QUALITY_SLACK_CHANNEL) | 営業リーダーが当日中に対処する (書込権の付与、または /admin/staff で「営業以外」にする) |
+| 初回アポ欠席カード | NO_SHOW_REPORT_SLACK_CHANNEL 既定 #sales-リスケ対応 (2026-09-08 まで #sales-アポ結果報告) | 担当営業が当日中にスレッドへ当日対応を記録する |
+| パートナーエントリーの追跡 (予約できたか / 1 時間たっても未予約か) | PARTNER_ENTRY_SLACK_CHANNEL (既定 C0BPEK3GQQ1 = 非公開 #sales-partner-entry)。投稿は APPO_FEEDBACK_SLACK_TOKEN のアプリ (automation) で行う。off で停止 | 未予約の通知を見た担当営業が当日中に本人へ連絡し、日程を取り直す。返信の方は見るだけ |
+| 週次の進捗アラート (下がった担当・指標の名指し) | #sales-商談品質 (SALES_TREND_ALERT_SLACK_CHANNEL || MEETING_QUALITY_SLACK_CHANNEL) | 営業マネージャーが翌営業日までに名指しされた担当へ FB する (画面 /admin/sales-dashboard/sw/trend で原因と打ち手を見る) |
+| 👤 初めてログインした人を台帳に追加しました | SLACK_ERROR_CHANNEL 既定 #automation-アポ日程設定 | /admin/staff で当日中に確認する。営業なら「営業にする」を押す (押すまで Meet 成果物の移動対象にならない)。営業でなければそのままでよい |
 | カレンダー同期の失敗 | ALERT_SLACK_CHANNEL (未設定) → 従来チャンネル | エンジニアが当日中に同期を復旧する |
 | 二重予約の事後検知 | SLACK_CHANNEL_SALES 既定 | 担当営業が当日中にどちらかを別枠へ移す |
 
-## 自動で動いている処理
+### 自動で動いている処理
 
 | 自動処理 | いつ動くか | cron 式 |
 |---|---|---|
+| `/api/cron/ad-follow-up-overdue` | 平日 18:00 (JST) | `0 9 * * 1-5` |
 | `/api/cron/appo-feedback-judge` | 毎日 5 分おき | `*/5 * * * *` |
+| `/api/cron/appo-result-report?slot=12` | 毎日 12:00 (JST) | `0 3 * * *` |
+| `/api/cron/appo-result-report?slot=15` | 毎日 15:00 (JST) | `0 6 * * *` |
+| `/api/cron/appo-result-report?slot=18` | 毎日 18:00 (JST) | `0 9 * * *` |
+| `/api/cron/appo-result-report?slot=eod` | 毎日 22:00 (JST) | `0 13 * * *` |
 | `/api/cron/appointment-count-summary` | 毎日 08:00 (JST) | `0 23 * * *` |
 | `/api/cron/booking-reminders?kind=after_appointment` | 1 時間おき | `5 * * * *` |
 | `/api/cron/booking-reminders?kind=day_before` | 毎日 16:00 (JST) | `0 7 * * *` |
+| `/api/cron/booking-reminders?kind=day_before&retry=1` | 毎日 16:13 (JST) | `13 7 * * *` |
+| `/api/cron/booking-reminders?kind=day_before&retry=2` | 毎日 16:33 (JST) | `33 7 * * *` |
+| `/api/cron/booking-reminders?kind=nurture` | 毎日 10:00 (JST) | `0 1 * * *` |
+| `/api/cron/booking-reminders?kind=nurture&retry=1` | 毎日 10:13 (JST) | `13 1 * * *` |
+| `/api/cron/booking-reminders?kind=nurture&retry=2` | 毎日 10:33 (JST) | `33 1 * * *` |
 | `/api/cron/booking-reminders?kind=one_hour_before` | 毎日 10 分おき | `*/10 * * * *` |
 | `/api/cron/booking-reminders?kind=two_hours_before` | 毎日 10 分おき | `*/10 * * * *` |
 | `/api/cron/call-count-sheet` | 5 0-12 * * * | `5 0-12 * * *` |
@@ -746,8 +786,11 @@ Slack に流れる通知のうち、**誰かが期限内に動く必要がある
 | `/api/cron/demo-invite-retry` | 毎日 09:30 (JST) | `30 0 * * *` |
 | `/api/cron/demo-proposal-reminders` | 毎日 09:00 (JST) | `0 0 * * *` |
 | `/api/cron/detect-duplicate-sends` | 1 時間おき | `25 * * * *` |
+| `/api/cron/detect-stopped-mails` | 毎日 09:30 (JST) | `30 0 * * *` |
 | `/api/cron/enqueue-cadence` | 毎日 07:30 (JST) | `30 22 * * *` |
 | `/api/cron/event-sends` | 0 0-10 * * * | `0 0-10 * * *` |
+| `/api/cron/free-demo-reuse-dossier` | 1 時間おき | `50 * * * *` |
+| `/api/cron/free-demo-reuse-dossier-jobs` | 2-57/5 * * * * | `2-57/5 * * * *` |
 | `/api/cron/generate-lists` | 毎日 07:00 (JST) | `0 22 * * *` |
 | `/api/cron/hearing-dossier` | 1 時間おき | `20 * * * *` |
 | `/api/cron/hearing-drive-mirror` | 1 時間おき | `0 * * * *` |
@@ -755,8 +798,10 @@ Slack に流れる通知のうち、**誰かが期限内に動く必要がある
 | `/api/cron/hearing-leak-check` | 毎日 08:00 (JST) | `0 23 * * *` |
 | `/api/cron/hearing-mail-retry` | 毎日 15 分おき | `*/15 * * * *` |
 | `/api/cron/hearing-pa-delivery` | 毎日 5 分おき | `*/5 * * * *` |
+| `/api/cron/hearing-retransfer` | 毎日 15 分おき | `*/15 * * * *` |
 | `/api/cron/hearing-sheet-queued` | 毎日 10 分おき | `*/10 * * * *` |
 | `/api/cron/hearing-status-alert` | 平日 09:50 (JST) | `50 0 * * 1-5` |
+| `/api/cron/judge-subweb-cross-sell` | 毎日 06:50 (JST) | `50 21 * * *` |
 | `/api/cron/meeting-quality-digest` | 毎日 19:00 (JST) | `0 10 * * *` |
 | `/api/cron/meeting-quality-fb-harvest` | 1 時間おき | `50 * * * *` |
 | `/api/cron/meeting-quality-fb-triage` | 5,35 * * * * | `5,35 * * * *` |
@@ -764,10 +809,14 @@ Slack に流れる通知のうち、**誰かが期限内に動く必要がある
 | `/api/cron/meeting-quality-lead-facts` | 毎日 5 分おき | `*/5 * * * *` |
 | `/api/cron/meeting-quality-rescore` | 毎日 5 分おき | `*/5 * * * *` |
 | `/api/cron/meeting-quality-score` | 毎日 5 分おき | `*/5 * * * *` |
+| `/api/cron/meeting-quality-super-hearing-sweep?slot=12` | 毎日 12:00 (JST) | `0 3 * * *` |
+| `/api/cron/meeting-quality-super-hearing-sweep?slot=15` | 毎日 15:00 (JST) | `0 6 * * *` |
+| `/api/cron/meeting-quality-super-hearing-sweep?slot=22` | 毎日 22:00 (JST) | `0 13 * * *` |
 | `/api/cron/monitor-video-clicks` | 毎日 17:00 (JST) | `0 8 * * *` |
 | `/api/cron/monthly-reappo-blast` | 0 1 20 * * | `0 1 20 * *` |
 | `/api/cron/no-show-report` | 毎日 07:10 (JST) | `10 22 * * *` |
 | `/api/cron/normalize-transcript-names` | 毎日 21:30 (JST) | `30 12 * * *` |
+| `/api/cron/partner-entry-followup` | 毎日 10 分おき | `*/10 * * * *` |
 | `/api/cron/payroll-reconcile` | 毎日 08:00 (JST) | `0 23 * * *` |
 | `/api/cron/poll-mailbox` | 1 時間おき | `0 * * * *` |
 | `/api/cron/process-ai-call-queue` | 15 0-8 * * * | `15 0-8 * * *` |
@@ -782,10 +831,12 @@ Slack に流れる通知のうち、**誰かが期限内に動く必要がある
 | `/api/cron/record-appo-done` | 毎日 07:55 (JST) | `55 22 * * *` |
 | `/api/cron/reset-stale-demo-jobs` | 毎日 30 分おき | `*/30 * * * *` |
 | `/api/cron/sales-qa-gap-digest` | 毎週月曜 10:00 (JST) | `0 1 * * 1` |
+| `/api/cron/sales-trend-weekly-alert` | 毎週月曜 09:30 (JST) | `30 0 * * 1` |
 | `/api/cron/seminar-reminders` | 毎日 10 分おき | `*/10 * * * *` |
 | `/api/cron/snapshot-deal-status` | 毎日 06:40 (JST) | `40 21 * * *` |
 | `/api/cron/staff-slack-link` | 毎日 09:30 (JST) | `30 0 * * *` |
 | `/api/cron/subweb-ochi-sweep` | 毎日 11:00 (JST) | `0 2 * * *` |
+| `/api/cron/sync-agent-form` | 毎日 5 分おき | `*/5 * * * *` |
 | `/api/cron/sync-calendar` | 1 時間おき | `15 * * * *` |
 | `/api/cron/sync-gmail-sent` | 20,50 * * * * | `20,50 * * * *` |
 | `/api/cron/sync-kintone` | 毎日 06:00 (JST) | `0 21 * * *` |
