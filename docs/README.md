@@ -31,6 +31,7 @@
 - [Propagate-Desk-運用マニュアル](docs/00-運用マニュアル/05-Propagate-Desk-運用マニュアル.md)
 - [propagate-meet-操作マニュアル](docs/00-運用マニュアル/06-propagate-meet-操作マニュアル.md)
 - [ドメイン-GSC-GA-Workspace設定依頼管理-運用マニュアル](docs/00-運用マニュアル/07-ドメイン-GSC-GA-Workspace設定依頼管理-運用マニュアル.md)
+- [制作進行アプリ-使い方](docs/00-運用マニュアル/09-制作進行アプリ-使い方.md)
 
 ### 01-技術仕様
 
